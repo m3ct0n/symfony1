@@ -285,7 +285,7 @@ class sfSimpleAutoload
 
         //@ZendGuard:
         if (count($classes[1]) == 0) {
-            if (stristr($content, '<?php @Zend;') !== FALSE) {
+            if (stristr($content, '<?php @Zend;') !== FALSE || stristr($content, 'GPMH_DO_NOT_EDIT_THIS_FILE') !== FALSE) {
                 $explodes = explode('/', $file);
                 $classphp = $explodes[count($explodes) - 1];
                 $classnames = explode('.', $classphp);
