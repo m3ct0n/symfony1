@@ -1,5 +1,5 @@
 {
-    "name": "recras/symfony1",
+    "name": "m3ct0n/symfony1",
     "description": "Fork of symfony 1.4, based on lexpress/symfony1",
     "license": "MIT",
     "require": {
