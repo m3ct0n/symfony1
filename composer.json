@@ -1,20 +1,25 @@
 {
-    "name": "friendsofsymfony1/symfony1",
-    "description": "Fork of symfony 1.4 with dic, form enhancements, latest swiftmailer and better performance",
-    "type": "library",
+    "name": "recras/symfony1",
+    "description": "Fork of symfony 1.4, based on lexpress/symfony1",
     "license": "MIT",
     "require": {
-        "php" : ">=5.3.0",
-        "swiftmailer/swiftmailer": "~5.2"
+        "php": ">=7.4"
     },
     "require-dev": {
+        "phpstan/phpstan": "^0.12.25",
         "psr/log": "*"
     },
+    "type": "library",
     "autoload": {
-        "files": ["autoload.php"]
+        "classmap": [
+            "lib/validator"
+        ],
+        "files": [
+            "autoload.php"
+        ]
     },
     "suggest": {
-        "friendsofsymfony1/doctrine1": "Doctrine plugin",
+        "lexpress/doctrine1": "Doctrine plugin",
         "propel/sf-propel-o-r-m-plugin": "Propel plugin",
         "psr/log": "Psr logger"
     },
@@ -23,5 +28,7 @@
             "dev-master": "1.5-dev"
         }
     },
-    "bin": ["data/bin/symfony"]
+    "bin": [
+        "data/bin/symfony"
+    ]
 }

@@ -77,7 +77,7 @@ EOF;
       $code = file_get_contents($file);
 
       // introspect the model without loading the class
-      if (preg_match_all('/@property (\w+) \$(\w+)/', $code, $matches, PREG_SET_ORDER))
+      if (preg_match_all('/@property (\S+) \$(\w+)/', $code, $matches, PREG_SET_ORDER))
       {
         $properties = array();
         foreach ($matches as $match)
@@ -96,7 +96,7 @@ EOF;
           $collection = 'Doctrine_Collection' == $type;
 
           $getters[] = sprintf('@method %-'.$typePad.'s %s%-'.($namePad + 2).'s Returns the current record\'s "%s" %s', $type, 'get', $camelized.'()', $name, $collection ? 'collection' : 'value');
-          $setters[] = sprintf('@method %-'.$typePad.'s %s%-'.($namePad + 2).'s Sets the current record\'s "%s" %s', $model, 'set', $camelized.'()', $name, $collection ? 'collection' : 'value');
+          $setters[] = sprintf('@method %-'.$typePad.'s %s%-'.($namePad + 2).'s Sets the current record\'s "%s" %s', $model, 'set', $camelized.'($'.$name.')', $name, $collection ? 'collection' : 'value');
         }
 
         // use the last match as a search string

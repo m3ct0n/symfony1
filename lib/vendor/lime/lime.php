@@ -564,7 +564,7 @@ class lime_test
     return array($traces[$last]['file'], $traces[$last]['line']);
   }
 
-  public function handle_error($code, $message, $file, $line, $context)
+  public function handle_error($code, $message, $file, $line, $context = null)
   {
     if (!$this->options['error_reporting'] || ($code & error_reporting()) == 0)
     {
@@ -934,6 +934,10 @@ class lime_harness extends lime_registration
 
       $relative_file = $this->get_relative_file($file);
 
+      if(!is_dir($this->options['test_path'])) {
+        mkdir($this->options['test_path']);
+      }
+
       $test_file = tempnam($this->options['test_path'], 'lime_test').'.php';
       $result_file = tempnam($this->options['test_path'], 'lime_result');
       file_put_contents($test_file, <<<EOF
@@ -950,8 +954,9 @@ EOF
       ob_start();
       // see http://trac.symfony-project.org/ticket/5437 for the explanation on the weird "cd" thing
       passthru(sprintf('cd & %s %s 2>&1', escapeshellarg($this->php_cli), escapeshellarg($test_file)), $return);
+      $cmdOutput = ob_get_contents();
       ob_end_clean();
-      unlink($test_file);
+      sfToolkit::safeUnlink($test_file);
 
       $output = file_get_contents($result_file);
       $stats['output'] = $output ? unserialize($output) : '';
@@ -959,7 +964,7 @@ EOF
       {
         $stats['output'] = array(array('file' => $file, 'tests' => array(), 'stats' => array('plan' => 1, 'total' => 1, 'failed' => array(0), 'passed' => array(), 'skipped' => array(), 'errors' => array())));
       }
-      unlink($result_file);
+      sfToolkit::safeUnlink($result_file);
 
       $file_stats = &$stats['output'][0]['stats'];
 
@@ -1003,6 +1008,7 @@ EOF
       if ('dubious' == $stats['status'])
       {
         $this->output->echoln(sprintf('    Test returned status %s', $stats['status_code']));
+        echo $cmdOutput;
       }
 
       if ('ok' != $stats['status'])
@@ -1027,6 +1033,7 @@ EOF
         $this->stats['failed_tests'] += count($file_stats['failed']);
 
         $this->output->echoln(sprintf("    Failed tests: %s", implode(', ', $file_stats['failed'])));
+        echo $cmdOutput;
       }
 
       if (false !== $file_stats && $file_stats['errors'])
@@ -1227,7 +1234,7 @@ EOF;
 
     if (file_exists($tmp_file))
     {
-      unlink($tmp_file);
+      sfToolkit::safeUnlink($tmp_file);
     }
   }
 

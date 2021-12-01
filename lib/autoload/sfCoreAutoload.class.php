@@ -11,7 +11,7 @@
 /**
  * The current symfony version.
  */
-define('SYMFONY_VERSION', '1.5.14-dev');
+define('SYMFONY_VERSION', '1.5.12-dev');
 
 /**
  * sfCoreAutoload class.
@@ -231,7 +231,6 @@ class sfCoreAutoload
     'sfprojectconfiguration' => 'config/sfProjectConfiguration.class.php',
     'sfrootconfighandler' => 'config/sfRootConfigHandler.class.php',
     'sfroutingconfighandler' => 'config/sfRoutingConfigHandler.class.php',
-    'sfsecurityconfighandler' => 'config/sfSecurityConfigHandler.class.php',
     'sfserviceconfighandler' => 'config/sfServiceConfigHandler.class.php',
     'sfsimpleyamlconfighandler' => 'config/sfSimpleYamlConfigHandler.class.php',
     'sfviewconfighandler' => 'config/sfViewConfigHandler.class.php',
@@ -249,6 +248,7 @@ class sfCoreAutoload
     'sftimer' => 'debug/sfTimer.class.php',
     'sftimermanager' => 'debug/sfTimerManager.class.php',
     'sfwebdebug' => 'debug/sfWebDebug.class.php',
+    'sfwebdebugjson' => 'debug/sfWebDebugJson.class.php',
     'sfwebdebugpanel' => 'debug/sfWebDebugPanel.class.php',
     'sfwebdebugpanelcache' => 'debug/sfWebDebugPanelCache.class.php',
     'sfwebdebugpanelconfig' => 'debug/sfWebDebugPanelConfig.class.php',
@@ -341,9 +341,6 @@ class sfCoreAutoload
     'sfstreamlogger' => 'log/sfStreamLogger.class.php',
     'sfvarlogger' => 'log/sfVarLogger.class.php',
     'sfwebdebuglogger' => 'log/sfWebDebugLogger.class.php',
-    'sfmailer' => 'mailer/sfMailer.class.php',
-    'sfmailermessageloggerplugin' => 'mailer/sfMailerMessageLoggerPlugin.class.php',
-    'sfnomailer' => 'mailer/sfNoMailer.class.php',
     'sfpearconfig' => 'plugin/sfPearConfig.class.php',
     'sfpeardownloader' => 'plugin/sfPearDownloader.class.php',
     'sfpearenvironment' => 'plugin/sfPearEnvironment.class.php',

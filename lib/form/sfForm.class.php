@@ -63,6 +63,7 @@ class sfForm implements ArrayAccess, Iterator, Countable
    */
   public function __construct($defaults = array(), $options = array(), $CSRFSecret = null)
   {
+    $this->setDefaults($defaults);
     $this->options = $options;
     $this->localCSRFSecret = $CSRFSecret;
 
@@ -70,7 +71,6 @@ class sfForm implements ArrayAccess, Iterator, Countable
     $this->widgetSchema    = new sfWidgetFormSchema();
     $this->errorSchema     = new sfValidatorErrorSchema($this->validatorSchema);
 
-    $this->setDefaults($defaults);
     $this->setup();
     $this->configure();
 
@@ -944,7 +944,7 @@ class sfForm implements ArrayAccess, Iterator, Countable
    */
   public function isCSRFProtected()
   {
-    return null !== $this->validatorSchema[self::$CSRFFieldName];
+    return $this->validatorSchema !== null && null !== $this->validatorSchema[self::$CSRFFieldName];
   }
 
   /**
@@ -1064,7 +1064,7 @@ class sfForm implements ArrayAccess, Iterator, Countable
    *
    * @return Boolean true if the widget exists, false otherwise
    */
-  public function offsetExists($name)
+  public function offsetExists($name): bool
   {
     return isset($this->widgetSchema[$name]);
   }
@@ -1076,7 +1076,7 @@ class sfForm implements ArrayAccess, Iterator, Countable
    *
    * @return sfFormField|sfFormFieldSchema A form field instance
    */
-  public function offsetGet($name)
+  public function offsetGet($name): mixed
   {
     if (!isset($this->formFields[$name]))
     {
@@ -1114,7 +1114,7 @@ class sfForm implements ArrayAccess, Iterator, Countable
    *
    * @throws <b>LogicException</b>
    */
-  public function offsetSet($offset, $value)
+  public function offsetSet($offset, $value): void
   {
     throw new LogicException('Cannot update form fields.');
   }
@@ -1126,7 +1126,7 @@ class sfForm implements ArrayAccess, Iterator, Countable
    *
    * @param string $offset The field name
    */
-  public function offsetUnset($offset)
+  public function offsetUnset($offset): void
   {
     unset(
       $this->widgetSchema[$offset],
@@ -1250,7 +1250,7 @@ class sfForm implements ArrayAccess, Iterator, Countable
    *
    * @return mixed The escaped value
    */
-  public function current()
+  public function current(): mixed
   {
     return $this[current($this->fieldNames)];
   }
@@ -1258,7 +1258,7 @@ class sfForm implements ArrayAccess, Iterator, Countable
   /**
    * Moves to the next form field (implements the Iterator interface).
    */
-  public function next()
+  public function next(): void
   {
     next($this->fieldNames);
     --$this->count;

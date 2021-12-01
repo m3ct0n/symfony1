@@ -63,12 +63,14 @@ class sfSessionStorage extends sfStorage
       'session_cookie_secure'   => $cookieDefaults['secure'],
       'session_cookie_httponly' => isset($cookieDefaults['httponly']) ? $cookieDefaults['httponly'] : false,
       'session_cache_limiter'   => null,
-      'gc_maxlifetime'          => 1800,
     ), $options);
 
     // initialize parent
     parent::initialize($options);
 
+    if (self::$sessionStarted) {
+      return;
+    }
     // set session name
     $sessionName = $this->options['session_name'];
 
@@ -91,13 +93,7 @@ class sfSessionStorage extends sfStorage
       session_cache_limiter($this->options['session_cache_limiter']);
     }
 
-    // force the max lifetime for session garbage collector to be greater than timeout
-    if (ini_get('session.gc_maxlifetime') < $this->options['gc_maxlifetime'])
-    {
-      ini_set('session.gc_maxlifetime', $this->options['gc_maxlifetime']);
-    }
-
-    if ($this->options['auto_start'] && !self::$sessionStarted)
+    if ($this->options['auto_start'] && !self::$sessionStarted && session_status() === PHP_SESSION_NONE)
     {
       session_start();
       self::$sessionStarted = true;

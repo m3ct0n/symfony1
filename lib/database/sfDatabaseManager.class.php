@@ -65,7 +65,18 @@ class sfDatabaseManager
    */
   public function loadConfiguration()
   {
-    if ($this->configuration instanceof sfApplicationConfiguration)
+    if (!empty($_SERVER['DOCTRINE_DSN']))
+    {
+      $parameters = array(
+        'name' => 'doctrine',
+        'dsn' => $_SERVER['DOCTRINE_DSN'],
+      );
+      if (isset($this->configuration->doctrineConnectionCharset)) {
+        $parameters['encoding'] = $this->configuration->doctrineConnectionCharset;
+      }
+      $databases = array('doctrine' => new sfDoctrineDatabase($parameters));
+    }
+    elseif ($this->configuration instanceof sfApplicationConfiguration)
     {
       $databases = include($this->configuration->getConfigCache()->checkConfig('config/databases.yml'));
     }

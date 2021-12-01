@@ -98,7 +98,7 @@ class sfValidatorErrorSchema extends sfValidatorError implements ArrayAccess, It
   /**
    * Adds a collection of errors.
    *
-   * @param sfValidatorErrorSchema $errorsAn sfValidatorErrorSchema instance
+   * @param sfValidatorErrorSchema $errors An sfValidatorErrorSchema instance
    *
    * @return sfValidatorErrorSchema The current error schema instance
    */
@@ -304,7 +304,7 @@ class sfValidatorErrorSchema extends sfValidatorError implements ArrayAccess, It
    *
    * @return string The instance as a serialized string
    */
-  public function serialize()
+  public function __serialize()
   {
     return serialize(array($this->validator, $this->arguments, $this->code, $this->message, $this->errors, $this->globalErrors, $this->namedErrors));
   }

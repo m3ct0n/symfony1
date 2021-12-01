@@ -193,7 +193,7 @@ class sfWebResponse extends sfResponse
   /**
    * Sets response status code.
    *
-   * @param string $code  HTTP status code
+   * @param int $code  HTTP status code
    * @param string $name  HTTP status text
    *
    */
@@ -227,7 +227,7 @@ class sfWebResponse extends sfResponse
    * Sets a HTTP header.
    *
    * @param string  $name     HTTP header name
-   * @param string  $value    Value (if null, remove the HTTP header)
+   * @param string|null  $value    Value (if null, remove the HTTP header)
    * @param bool    $replace  Replace for the value
    *
    */
@@ -874,7 +874,7 @@ class sfWebResponse extends sfResponse
   /**
    * @see sfResponse
    */
-  public function serialize()
+  public function __serialize()
   {
     return serialize(array($this->content, $this->statusCode, $this->statusText, $this->options, $this->headerOnly, $this->headers, $this->metas, $this->httpMetas, $this->stylesheets, $this->javascripts, $this->slots));
   }

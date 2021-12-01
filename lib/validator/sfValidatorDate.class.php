@@ -94,11 +94,9 @@ class sfValidatorDate extends sfValidatorBase
     {
       try
       {
-        $date = new DateTime($value);
-        $date->setTimezone(new DateTimeZone(date_default_timezone_get()));
-        $clean = $date->format('YmdHis');
+        list($date, $clean) = $this->cleanInputString($value);
       }
-      catch (Exception $e)
+      catch (sfParseException $e)
       {
         throw new sfValidatorError($this, 'invalid', array('value' => $value));
       }
@@ -117,6 +115,7 @@ class sfValidatorDate extends sfValidatorBase
       else
       {
         $dateMax  = new DateTime($max);
+        $dateMax->setTimezone(new DateTimeZone(date_default_timezone_get()));
         $max      = $dateMax->format('YmdHis');
         $maxError = $dateMax->format($this->getOption('date_format_range_error'));
       }
@@ -140,6 +139,7 @@ class sfValidatorDate extends sfValidatorBase
       else
       {
         $dateMin  = new DateTime($min);
+        $dateMin->setTimezone(new DateTimeZone(date_default_timezone_get()));
         $min      = $dateMin->format('YmdHis');
         $minError = $dateMin->format($this->getOption('date_format_range_error'));
       }
@@ -167,7 +167,7 @@ class sfValidatorDate extends sfValidatorBase
    *
    * @param  array $value  An array of date elements
    *
-   * @return int A timestamp
+   * @return string A timestamp
    */
   protected function convertDateArrayToString($value)
   {
@@ -257,5 +257,20 @@ class sfValidatorDate extends sfValidatorBase
     }
 
     return parent::isEmpty($value);
+  }
+
+  protected function cleanInputString($value)
+  {
+    try {
+      $date = new DateTime($value);
+    } catch (Exception $e) {
+      $ex = new sfParseException(sprintf('Wrapped %s: %s', get_class($e), $e->getMessage()));
+      $ex->setWrappedException($e);
+      throw $ex;
+    }
+    if ($this->getOption('with_time')) {
+      $date->setTimezone(new DateTimeZone(date_default_timezone_get()));
+    }
+    return array($date, $date->format('YmdHis'));
   }
 }

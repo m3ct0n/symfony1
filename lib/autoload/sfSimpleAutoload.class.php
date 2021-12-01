@@ -261,43 +261,39 @@ class sfSimpleAutoload
    * @param string  $file     A file path
    * @param Boolean $register Whether to register those files as single entities (used when reloading)
    */
-  public function addFile($file, $register = true) {
-        if (!is_file($file)) {
-            return;
-        }
-
-        if (in_array($file, $this->files)) {
-            if ($this->cacheLoaded) {
-                return;
-            }
-        } else {
-            if ($register) {
-                $this->files[] = $file;
-            }
-        }
-
-        if ($register) {
-            $this->cacheChanged = true;
-        }
-
-        $content = file_get_contents($file);
-        preg_match_all('~^\s*(?:abstract\s+|final\s+)?(?:class|interface)\s+(\w+)~mi', $content, $classes);
-
-        //@ZendGuard:
-        if (count($classes[1]) == 0) {
-            if (stristr($content, '<?php @Zend;') !== FALSE || stristr($content, 'GPMH_DO_NOT_EDIT_THIS_FILE') !== FALSE) {
-                $explodes = explode('/', $file);
-                $classphp = $explodes[count($explodes) - 1];
-                $classnames = explode('.', $classphp);
-                $classname = $classnames[0];
-                $classes = array('', array($classname));
-            }
-        }
-
-        foreach ($classes[1] as $class) {
-            $this->classes[strtolower($class)] = $file;
-        }
+  public function addFile($file, $register = true)
+  {
+    if (!is_file($file))
+    {
+      return;
     }
+
+    if (in_array($file, $this->files))
+    {
+      if ($this->cacheLoaded)
+      {
+        return;
+      }
+    }
+    else
+    {
+      if ($register)
+      {
+        $this->files[] = $file;
+      }
+    }
+
+    if ($register)
+    {
+      $this->cacheChanged = true;
+    }
+
+    preg_match_all('~^\s*(?:abstract\s+|final\s+)?(?:class|interface|trait)\s+(\w+)~mi', file_get_contents($file), $classes);
+    foreach ($classes[1] as $class)
+    {
+      $this->classes[strtolower($class)] = $file;
+    }
+  }
 
   /**
    * Sets the path for a particular class.

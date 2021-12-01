@@ -210,7 +210,7 @@ class sfValidatorFile extends sfValidatorBase
    *
    * @param  string $file  The absolute path of a file
    *
-   * @return string The mime type of the file (null if not guessable)
+   * @return string|null The mime type of the file (null if not guessable)
    */
   protected function guessFromFileinfo($file)
   {
@@ -240,7 +240,7 @@ class sfValidatorFile extends sfValidatorBase
    *
    * @param  string $file  The absolute path of a file
    *
-   * @return string The mime type of the file (null if not guessable)
+   * @return string|null The mime type of the file (null if not guessable)
    */
   protected function guessFromMimeContentType($file)
   {
@@ -257,15 +257,13 @@ class sfValidatorFile extends sfValidatorBase
    *
    * @param  string $file  The absolute path of a file
    *
-   * @return string The mime type of the file (null if not guessable)
+   * @return string|null The mime type of the file (null if not guessable)
    */
   protected function guessFromFileBinary($file)
   {
     ob_start();
     //need to use --mime instead of -i. see #6641
-    $cmd = 'file -b --mime -- %s 2>/dev/null';
-    $file = (0 === strpos($file, '-') ? './' : '').$file;
-    passthru(sprintf($cmd, escapeshellarg($file)), $return);
+    passthru(sprintf('file -b --mime %s 2>/dev/null', escapeshellarg($file)), $return);
     if ($return > 0)
     {
       ob_end_clean();
@@ -311,7 +309,7 @@ class sfValidatorFile extends sfValidatorBase
   /**
    * Returns the maximum size of an uploaded file as configured in php.ini
    *
-   * @return type The maximum size of an uploaded file in bytes
+   * @return int The maximum size of an uploaded file in bytes
    */
   protected function getMaxFilesize()
   {

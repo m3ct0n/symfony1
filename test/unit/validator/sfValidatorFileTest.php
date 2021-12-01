@@ -10,7 +10,7 @@
 
 require_once(__DIR__.'/../../bootstrap/unit.php');
 
-$t = new lime_test(70);
+$t = new lime_test(69);
 
 $tmpDir = sys_get_temp_dir();
 $content = 'This is an ASCII file.';
@@ -106,7 +106,6 @@ $v = new testValidatorFile();
 $t->is($v->guessFromFileBinary($tmpDir.'/test.txt'), 'text/plain', '->guessFromFileBinary() guesses the type of a given file');
 $t->is($v->guessFromFileBinary($tmpDir.'/foo.txt'), null, '->guessFromFileBinary() returns null if the file type is not guessable');
 $t->is($v->guessFromFileBinary('/bin/ls'), (PHP_OS != 'Darwin') ? 'application/x-executable' : 'application/octet-stream', '->guessFromFileBinary() returns correct type if file is guessable');
-$t->is($v->guessFromFileBinary('-test'), null, '->guessFromFileBinary() returns null if file path has leading dash');
 
 // ->getMimeType()
 $t->diag('->getMimeType()');
@@ -299,6 +298,6 @@ $f = new sfValidatedFile('test', 'text/plain', $tmpDir.'/test.txt', strlen($cont
 $t->is($f->getOriginalExtension(), '', '->getOriginalExtension() returns an empty extension if the uploaded file name has no extension');
 $t->is($f->getOriginalExtension('bin'), 'bin', '->getOriginalExtension() takes a default extension as its first argument');
 
-unlink($tmpDir.'/test.txt');
+sfToolkit::safeUnlink($tmpDir.'/test.txt');
 sfToolkit::clearDirectory($tmpDir.'/foo');
 rmdir($tmpDir.'/foo');

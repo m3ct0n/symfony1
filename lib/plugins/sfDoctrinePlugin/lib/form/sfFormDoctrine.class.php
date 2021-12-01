@@ -364,7 +364,7 @@ abstract class sfFormDoctrine extends sfFormObject
 
     if ($directory && $filename && is_file($file = $directory.'/'.$filename))
     {
-      unlink($file);
+      sfToolkit::safeUnlink($file);
     }
   }
 

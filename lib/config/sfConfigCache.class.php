@@ -337,7 +337,10 @@ class sfConfigCache
     $cacheDir      = dirname($cache);
     if (!is_dir($cacheDir) && !@mkdir($cacheDir, 0777, true) && !is_dir($cacheDir))
     {
-        throw new \sfCacheException(sprintf('Failed to make cache directory "%s" while generating cache for configuration file "%s".', $cacheDir, $config));
+      if (false === @mkdir(dirname($cache), 0777, true) && !is_dir(dirname($cache)))
+      {
+        throw new \sfCacheException(sprintf('Failed to make cache directory "%s" while generating cache for configuration file "%s".', dirname($cache), $config));
+      }
     }
 
     $tmpFile = tempnam($cacheDir, basename($cache));
@@ -357,7 +360,7 @@ class sfConfigCache
     {
       if (copy($tmpFile, $cache))
       {
-        unlink($tmpFile);
+        sfToolkit::safeUnlink($tmpFile);
       }
     }
 
