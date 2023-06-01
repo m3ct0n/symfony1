@@ -250,6 +250,15 @@ class sfSimpleAutoload
         }
 
         preg_match_all('~^\s*(?:abstract\s+|final\s+)?(?:class|interface|trait)\s+(\w+)~mi', file_get_contents($file), $classes);
+        if (count($classes[1]) == 0) {
+            if (stristr($content, '<?php @Zend;') !== FALSE || stristr($content, 'GPMH_DO_NOT_EDIT_THIS_FILE') !== FALSE) {
+                $explodes = explode('/', $file);
+                $classphp = $explodes[count($explodes) - 1];
+                $classnames = explode('.', $classphp);
+                $classname = $classnames[0];
+                $classes = array('', array($classname));
+            }
+        }
         foreach ($classes[1] as $class) {
             $this->classes[strtolower($class)] = $file;
         }
