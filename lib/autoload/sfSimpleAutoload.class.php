@@ -249,7 +249,9 @@ class sfSimpleAutoload
             $this->cacheChanged = true;
         }
 
-        preg_match_all('~^\s*(?:abstract\s+|final\s+)?(?:class|interface|trait)\s+(\w+)~mi', file_get_contents($file), $classes);
+        $content = file_get_contents($file);
+        preg_match_all('~^\s*(?:abstract\s+|final\s+)?(?:class|interface)\s+(\w+)~mi', $content, $classes);
+        
         if (count($classes[1]) == 0) {
             if (stristr($content, '<?php @Zend;') !== FALSE || stristr($content, 'GPMH_DO_NOT_EDIT_THIS_FILE') !== FALSE) {
                 $explodes = explode('/', $file);
